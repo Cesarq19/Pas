@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Poliza
+{% endblock %}
+
+{% block body %}
+	<div class="fluid-container">
+		<h1>Poliza</h1>
+
+		<table class="table">
+			<tbody>
+				<tr>
+					<th>Id</th>
+					<td>{{ poliza.id }}</td>
+				</tr>
+				<tr>
+					<th>Numeropoliza</th>
+					<td>{{ poliza.numeropoliza }}</td>
+				</tr>
+				<tr>
+					<th>Fechainicio</th>
+					<td>{{ poliza.fechainicio ? poliza.fechainicio|date('Y-m-d') : '' }}</td>
+				</tr>
+				<tr>
+					<th>Fechafin</th>
+					<td>{{ poliza.fechafin ? poliza.fechafin|date('Y-m-d') : '' }}</td>
+				</tr>
+				<tr>
+					<th>Estado</th>
+					<td>{{ poliza.estado }}</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<a href="{{ path('app_poliza_index') }}">back to list</a>
+
+		<a href="{{ path('app_poliza_edit', {'id': poliza.id}) }}">edit</a>
+
+		{{ include('poliza/_delete_form.html.twig') }}
+	</div>
+
+{% endblock %}

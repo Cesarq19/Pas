@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Info Polizas
+{% endblock %}
+
+{% block body %}
+	<div class="container-fluid justify-content-center align-items-center">
+		<div class="container-fluid">
+			
+            <div class="text-center">
+                <h1 class="display-3 mb-4">Poliza index</h1>
+            </div>
+
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Numero de Poliza</th>
+						<th>Fecha Inicio</th>
+						<th>Fecha Fin</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for poliza in polizas %}
+						<tr>
+							<td>{{ poliza.numeropoliza }}</td>
+							<td>{{ poliza.fechainicio ? poliza.fechainicio|date('Y-m-d') : '' }}</td>
+							<td>{{ poliza.fechafin ? poliza.fechafin|date('Y-m-d') : '' }}</td>
+							<td>{{ poliza.estado }}</td>
+							<td>
+								<a href="{{ path('app_poliza_show', {'id': poliza.id}) }}">show</a>
+								<a href="{{ path('app_poliza_edit', {'id': poliza.id}) }}">edit</a>
+							</td>
+						</tr>
+					{% else %}
+						<tr>
+							<td colspan="6">No existen polizas registradas</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+		<div class="container-fluid align-items-center">
+			<a href="{{ path('app_poliza_new') }}" class="btn btn-info justify-content-center">Crear nuevo</a>
+		</div>
+	</div>
+
+{% endblock %}
