@@ -13,23 +13,31 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/poliza')]
 class PolizaController extends AbstractController
 {
+    private $polizas;
+
+    public function __construct(PolizaRepository $polizas)
+    {
+        $this->polizas = $polizas;
+    }
+
+
     #[Route('/', name: 'app_poliza_index', methods: ['GET'])]
-    public function index(PolizaRepository $polizaRepository): Response
+    public function index(): Response
     {
         return $this->render('poliza/index.html.twig', [
-            'polizas' => $polizaRepository->findAll(),
+            'polizas' => $this->polizas->findAll(),
         ]);
     }
 
     #[Route('/new', name: 'app_poliza_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, PolizaRepository $polizaRepository): Response
+    public function new(Request $request): Response
     {
         $poliza = new Poliza();
         $form = $this->createForm(PolizaType::class, $poliza);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $polizaRepository->save($poliza, true);
+            $this->polizas->save($poliza, true);
 
             return $this->redirectToRoute('app_poliza_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -49,13 +57,13 @@ class PolizaController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_poliza_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Poliza $poliza, PolizaRepository $polizaRepository): Response
+    public function edit(Request $request, Poliza $poliza): Response
     {
         $form = $this->createForm(PolizaType::class, $poliza);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $polizaRepository->save($poliza, true);
+            $this->polizas->save($poliza, true);
 
             return $this->redirectToRoute('app_poliza_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -67,10 +75,10 @@ class PolizaController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_poliza_delete', methods: ['POST'])]
-    public function delete(Request $request, Poliza $poliza, PolizaRepository $polizaRepository): Response
+    public function delete(Request $request, Poliza $poliza): Response
     {
         if ($this->isCsrfTokenValid('delete'.$poliza->getId(), $request->request->get('_token'))) {
-            $polizaRepository->remove($poliza, true);
+            $this->polizas->remove($poliza, true);
         }
 
         return $this->redirectToRoute('app_poliza_index', [], Response::HTTP_SEE_OTHER);
